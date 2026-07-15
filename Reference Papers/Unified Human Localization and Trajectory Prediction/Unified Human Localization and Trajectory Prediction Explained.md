@@ -132,6 +132,9 @@ Benchmarked on **NuScenes** (curated autonomous driving dataset) and **HEADS-UP*
 * **TF:** Transformer
 
 ---
-<p align="center">
-  <img src="https://img.shields.io/badge/Prepared%20by-Arisudan-blue?style=flat-square&logo=markdown" alt="Prepared by Arisudan">
+<p align="center"> 
+  <a href="https://github.com/Arisudan">
+    <img src="https://shields.io" alt="Prepared by Arisudan">
+  </a>
 </p>
+
