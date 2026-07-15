@@ -144,4 +144,4 @@ While BEV-ODOM represents a significant improvement in reducing scale drift, it 
 * **3-DoF:** Planar tracking restricted to $x$, $y$, and yaw angle ($\theta$)
 
 ---
-*Developed and certified by **Arisudan**.*
+<p align="center"><a href="https://github.com/Arisudan"><a href="https://github.com/Arisudan"><img src="https://img.shields.io/badge/Prepared%20by-Arisudan-blue?style=flat-square&logo=markdown" alt="Prepared by Arisudan"></a></a></p>
