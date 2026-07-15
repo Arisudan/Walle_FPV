@@ -1,4 +1,3 @@
-```markdown
 # 📄 BEV-ODOM: Reducing Scale Drift in Monocular Visual Odometry with BEV Representation
 
 ## 🎯 1. Executive Summary (TL;DR)
@@ -42,4 +41,3 @@
 ## 💡 5. Immediate Takeaways & Use Cases
 - **Why it matters:** Demonstrates that BEV representations inherently encode scale-consistent geometric cues from monocular input alone — challenging the assumption that absolute-scale MVO requires depth/flow/segmentation supervision, and simplifying the learning-based VO pipeline while cutting annotation costs.
 - **Practical Application:** Well-suited for ground vehicle/robot navigation on largely planar terrain (autonomous driving, warehouse/logistics robots) where GPS-denied, low-cost, single-camera odometry is needed in real time; the >60fps throughput and no-loop-closure design make it attractive as a lightweight front-end odometry module, potentially paired with an external backend (SLAM/pose-graph optimization) for full mapping systems.
-```
