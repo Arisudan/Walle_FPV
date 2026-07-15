@@ -1,7 +1,6 @@
 # Walle FPV — R&D Evaluation Criteria (P0)
 
-#### Repository: Walle_FPV
-#### Camera: DJI O4 Pro (monocular)
+#### Repository: Walle_FPV | Camera: DJI O4 Pro (monocular)
 #### Status: P0 Priority
 #### Last Updated: 2026-07-15
 
