@@ -32,6 +32,12 @@ Stage 5
 ⬜ Target selection
 ⬜ FPV follow-me logic
 
+Stage 6
+--------
+⬜ Raspberry Pi optimization
+⬜ Real-time inference
+⬜ Drone integration
+
 -------------------------------------------
 
 # Custom Agent Rules
@@ -68,8 +74,4 @@ Whenever the user uploads an IEEE research paper for summarization, format the o
 Keep all descriptions lightweight, concise, technical, and highly readable.
 
 
-Stage 6
---------
-⬜ Raspberry Pi optimization
-⬜ Real-time inference
-⬜ Drone integration
+
