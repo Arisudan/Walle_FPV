@@ -72,6 +72,10 @@ Whenever the user uploads an IEEE research paper for summarization, format the o
     </p>
 
 Keep all descriptions lightweight, concise, technical, and highly readable.
+------------------------------------------------------
+4A FULLY AUTNOMOUS IN SSTRUCTURED ENVIRONMENT
+4B FULLY AUTONOMOUS IN GPS-DENIED ENVIRONMENTS
+4C FULLY AUTONOMOUS WITH DYNAMIC OBSTACLE AVAOIDANCE, ONLINE REPLANNING, AND PERCEPTION-DRIVEN DECISION MAKING
 
 
-
+----------
