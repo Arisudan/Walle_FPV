@@ -35,14 +35,20 @@ As a vehicle moves, minor tracking inaccuracies accumulate over time. This compo
 
 ## 3. How It Works (The 'Under the Hood' Breakdown)
 
-The BEV-ODOM pipeline processes consecutive camera frames to output relative motion parameters through a structured sequence of operations:
+### Data Transformation Pipeline (Tensor Flow Chart)
+This diagram illustrates the step-by-step tensor conversions as a single camera frame progresses through the system:
 
-1. **Feature Extraction:** Standard perspective-view image frames at time $t$ and $t+1$ are processed to extract multi-scale visual features.
-2. **Extrinsic and Intrinsic Fusion:** The camera's intrinsic parameters (focal length, optical center) and extrinsic parameters (mounting orientation) are encoded and fused into the feature maps.
-3. **Implicit Depth Distribution Estimation:** The network predicts discrete depth probabilities for each visual feature without relying on active range sensors.
-4. **Voxel Pooling and BEV Projection:** The multi-scale features are projected into a 3D coordinate space and then compressed along the vertical (height) axis to construct a 2D BEV feature map.
-5. **Local Correlation Computation:** The BEV map of frame $t+1$ is shifted relative to frame $t$ within a localized search range to generate a 4D correlation volume.
-6. **Pose Regression:** A decoder network processes the correlation scores to compute the vehicle's planar translation ($d_x, d_y$) and rotation ($\theta$).
+```mermaid
+graph TD
+    A["Raw Image Input: (H x W x 3)"] -->|ResNet-50 + FPN| B["Perspective Features: (C x H x W)"]
+    B -->|MLP(E, I) & SE Layer| C["Camera-Fused Features: (C x H x W)"]
+    C -->|Depth Distribution Net| D["Depth Map: (D x H x W)"]
+    C & D -->|Element-wise Mult ⊙| E["Multi-Dim Feature Map: (C x D x H x W)"]
+    E -->|Frustum Projection & Voxel Pooling| F["BEV Feature Map: (C_B x X_range x Y_range)"]
+    F -->|Local Shifts (±Δx, ±Δy)| G["Correlation Neck Matching"]
+    G -->|Shift Match Scores| H["Correlation Volume: (2Δx * 2Δy x X_range x Y_range)"]
+    H -->|CNN + MLP Decoders| I["3-DoF Pose output: (dx, dy, cosθ, sinθ)"]
+```
 
 ---
 
@@ -67,6 +73,17 @@ The technical implementation is divided into three key blocks:
 ### 3. Pose Prediction Decoder (Custom Implementation)
 * **Structure:** A sequential network of 2D convolutional layers followed by Fully Connected layers.
 * **Output Layer:** Features a `tanh` activation function to normalize translational and rotational bounds, enhancing robustness against motion outliers.
+
+### Module Input / Output Architecture Reference
+
+| Module / Layer | Inputs | Core Operation | Outputs | Tensor Dimensions |
+| :--- | :--- | :--- | :--- | :--- |
+| **Image Backbone** | Raw camera frame | Feature extraction using ResNet-50 & FPN | Multi-scale perspective features | $C \times H \times W$ |
+| **Camera Parameter Fusion** | Perspective features & Camera calibration ($E, I$) | Camera parameter encoding via MLP & Squeeze-and-Excitation (SE) multiplication | Scale-adjusted perspective feature maps | $C \times H \times W$ |
+| **Depth Predictor** | Scale-adjusted feature maps | Unsupervised depth distribution probability modeling | Probabilistic depth map | $D \times H \times W$ |
+| **Voxel Pooler** | Depth map & Scale-adjusted features | Frustum projection followed by vertical pooling (z-axis collapse) | 2D Bird's Eye View (BEV) map | $C_B \times X_{range} \times Y_{range}$ |
+| **Correlation Neck** | BEV maps at frame $t$ and $t+1$ | Local relative shifting ($\pm \Delta x, \pm \Delta y$) and inner-product calculations | 4D Correlation Volume containing matching scores | $2\Delta_x \cdot 2\Delta_y \times X_{range} \times Y_{range}$ |
+| **Pose Decoder** | 4D Correlation Volume | Convolutional pooling followed by fully connected layers with `tanh` activations | Planned translations and rotation predictions | $d_x, d_y, \cos \theta, \sin \theta$ |
 
 ---
 
@@ -108,3 +125,26 @@ To reproduce or extend this work, study these foundational modules:
 1. **Epipolar Geometry and Projective Transformation:** Understand the mathematics of homographies, coordinate projection, camera intrinsics ($K$), and extrinsics ($[R \mid t]$).
 2. **Lift-Splat-Shoot (LSS) Abstractions:** Review the original LSS framework (Philion & Fidler, 2020) to understand how 2D visual features project onto a discretized 3D voxel grid.
 3. **Feature Correlation and Flow Matching:** Study local search architectures and correlation volumes to understand how frame-to-frame displacement vectors are computed.
+
+---
+
+## 8. Where It Falls Short (Limitations)
+
+While BEV-ODOM represents a significant improvement in reducing scale drift, it exhibits several core technical limitations:
+* **Planar Ground Assumption (3-DoF Limitation):** The model is optimized strictly for 3-Degrees of Freedom movement ($d_x, d_y$, and yaw angle $\theta$). It assumes the vehicle moves on a flat surface and does not account for pitch, roll, or vertical z-axis translations.
+* **Vulnerability to Slopes and Elevation Changes:** During evaluations on steep environments (such as the hilly terrain in KITTI Sequence 10), translation accuracy degrades due to the lack of z-axis modeling.
+* **Sensitivity to Rapid Rotations:** Large angular transitions between consecutive frames can lead to matching failures in the localized $7 \times 7$ correlation window.
+
+---
+
+## Quick Reference: Key Terms
+
+* **MVO:** Monocular Visual Odometry
+* **BEV:** Bird's Eye View
+* **Scale Drift:** Progressive accumulation of distance errors over time
+* **LSS:** Lift-Splat-Shoot projection algorithm
+* **Correlation Volume:** Matrix tracking pixel matches across spatial shifts
+* **3-DoF:** Planar tracking restricted to $x$, $y$, and yaw angle ($\theta$)
+
+---
+*Developed and certified by **Arisudan**.*
