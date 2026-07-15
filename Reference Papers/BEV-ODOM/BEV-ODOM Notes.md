@@ -40,14 +40,14 @@ This diagram illustrates the step-by-step tensor conversions as a single camera 
 
 ```mermaid
 graph TD
-    A["Raw Image Input: (H x W x 3)"] -->|ResNet-50 + FPN| B["Perspective Features: (C x H x W)"]
-    B -->|MLP(E, I) & SE Layer| C["Camera-Fused Features: (C x H x W)"]
-    C -->|Depth Distribution Net| D["Depth Map: (D x H x W)"]
-    C & D -->|Element-wise Mult ⊙| E["Multi-Dim Feature Map: (C x D x H x W)"]
-    E -->|Frustum Projection & Voxel Pooling| F["BEV Feature Map: (C_B x X_range x Y_range)"]
-    F -->|Local Shifts (±Δx, ±Δy)| G["Correlation Neck Matching"]
-    G -->|Shift Match Scores| H["Correlation Volume: (2Δx * 2Δy x X_range x Y_range)"]
-    H -->|CNN + MLP Decoders| I["3-DoF Pose output: (dx, dy, cosθ, sinθ)"]
+    A["Raw Image Input: (H x W x 3)"] -->|"ResNet-50 + FPN"| B["Perspective Features: (C x H x W)"]
+    B -->|"MLP (E, I) and SE Layer"| C["Camera-Fused Features: (C x H x W)"]
+    C -->|"Depth Distribution Net"| D["Depth Map: (D x H x W)"]
+    C & D -->|"Element-wise Multiplication"| E["Multi-Dim Feature Map: (C x D x H x W)"]
+    E -->|"Frustum Projection & Voxel Pooling"| F["BEV Feature Map: (C_B x X_range x Y_range)"]
+    F -->|"Local Shifts (dx, dy)"| G["Correlation Neck Matching"]
+    G -->|"Shift Match Scores"| H["Correlation Volume: (2Δx * 2Δy x X_range x Y_range)"]
+    H -->|"CNN + MLP Decoders"| I["3-DoF Pose output: (dx, dy, cosθ, sinθ)"]
 ```
 
 ---
@@ -104,9 +104,6 @@ The BEV-ODOM framework was benchmarked against geometric methods (**ORB-SLAM3**)
 | | **ATE (m)** | 5547.81m | 158.55m | 1184.86m | **93.77m** |
 | **KITTI** *(Highway)* | **RTE (%)** | 3.31% | 2.07% | 21.01% | **1.72%** |
 | | **ATE (m)** | 6.11m | 7.72m | 73.70m | **6.35%** |
-
-### The 'Bottom Line'
-The experiments demonstrate that BEV-ODOM successfully resolves the scale drift problem. On the challenging, highly oscillatory NCLT dataset, it achieves a **4.75% RTE**, representing an **88% drift reduction** over existing optical-flow architectures. The system processes trajectories at **60+ Frames Per Second (FPS)** on consumer-grade hardware (NVIDIA RTX 4090), validating its suitability for real-time edge deployment.
 
 ---
 
