@@ -77,5 +77,27 @@ Keep all descriptions lightweight, concise, technical, and highly readable.
 4B FULLY AUTONOMOUS IN GPS-DENIED ENVIRONMENTS
 4C FULLY AUTONOMOUS WITH DYNAMIC OBSTACLE AVAOIDANCE, ONLINE REPLANNING, AND PERCEPTION-DRIVEN DECISION MAKING
 
+--------------
+the working flow i needed:
+live camera frame/video upload/video dataset only
+|
+Object Detcetion
+|
+RF-DETR and Depth Anything V2 Mteric Indoor
+|
+draw boxes on the video frame
+|
+show on the screen
 
+now also to this i needed a simple explained .csv/Excel sheet containing the documenattion of the following Evaluation criterias for this object detcetion:
+1. Precision
+2. mAP@0.5 and mAP@0.5:0.95
+3. Mean IoU
+4. FPS
+5. Inference Latency
+6. Recall
+7. F1 Score
+8. Absolute Relative Error
+9. Root Mean Squared Error
+10. as
 ----------
