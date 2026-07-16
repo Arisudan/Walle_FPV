@@ -538,8 +538,8 @@ By introducing **distance-parameterized** and **proposition-labeled confusion ma
 
 ---
 
-<div align="center">
-
-![Prepared by Arisudan](https://img.shields.io/badge/Prepared%20by-Arisudan-blue?style=for-the-badge)
-
-</div>
+<p align="center">
+  <a href="https://github.com/Arisudan">
+    <img src="https://img.shields.io/badge/Prepared%20by-Arisudan-blue?style=flat-square&logo=markdown" alt="Prepared by Arisudan">
+  </a>
+</p>
