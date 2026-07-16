@@ -3,7 +3,7 @@
 **Repository:** Walle_FPV  
 **Camera:** DJI O4 Pro (Monocular)  
 **Evaluation Version:** P0  
-**Last Updated:** 15 July 2026
+**Last Updated:** 16 July 2026
 
 ---
 
