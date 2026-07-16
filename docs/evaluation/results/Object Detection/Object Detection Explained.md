@@ -1,4 +1,4 @@
-# 🤖 Object Detection in Walle GCS — Simple English Explanation
+# 🤖 Object Detection in Walle GCS
 
 > This is a Ground Control Station (GCS) for a drone. It receives a live video feed from the drone's camera and uses AI to understand what's in the video. Let's break down **everything** related to object detection step by step.
 
