@@ -1,30 +1,30 @@
 Here is the complete, consolidated checklist of all parameters you need to measure for your indoor face detection and depth estimation pipeline.
-
-### 1. 2D Face Detection Performance (RF-DETR)
+---
+# 1. 2D Face Detection Performance (RF-DETR)
 
 ##### mAP@50: Accuracy at a 50% Intersection over Union overlap threshold.
 ##### mAP@50:95: Average accuracy across tight and loose overlap thresholds.
 ##### Small Face Precision: Percentage of correct predictions for tiny, distant faces.
 ##### Small Face Recall: Percentage of actual distant faces successfully detected.
 ##### Edge-Zone IoU Drop: The accuracy loss for faces at the warped frame borders.
+---
+# 2. Monocular Metric Depth Accuracy (Depth Anything v2)
 
-2. Monocular Metric Depth Accuracy (Depth Anything v2)
+##### Absolute Relative Error (Abs Rel): Average percentage gap from real-world meters.
+##### Root Mean Squared Error (RMSE): Average distance error heavily penalising large mistakes.
+##### Accuracy Threshold (δ < 1.25): Percentage of predictions within a 25% error margin.
+##### Scale Invariant Error (SILog): Relative depth layout accuracy regardless of global scale.
+##### Scale and Shift Stability (α, β): Consistency of your meter-alignment multipliers across rooms.
+---
+# 3. Integrated Face Distance Mapping (Fused Model)
 
-Absolute Relative Error (Abs Rel): Average percentage gap from real-world meters.
-Root Mean Squared Error (RMSE): Average distance error heavily penalising large mistakes.
-Accuracy Threshold (δ < 1.25): Percentage of predictions within a 25% error margin.
-Scale Invariant Error (SILog): Relative depth layout accuracy regardless of global scale.
-Scale and Shift Stability (α, β): Consistency of your meter-alignment multipliers across rooms.
+##### Face Centerpoint Depth Error: Specific meter accuracy at the cropped face coordinates.
+##### Temporal Depth Flickering: Distance reading variance for a stationary person over time.
+##### Blur Boundary Spikes: The increase in depth error when a face gets closer than 40cm.
+##### Distance Degradation Steps: Error tracking broken into 0–2m, 2–4m, and 4+m zones.
+---
+# 4. Hardware & System Constraints (DJI Osmo Action 4)
 
-3. Integrated Face Distance Mapping (Fused Model)
-
-Face Centerpoint Depth Error: Specific meter accuracy at the cropped face coordinates.
-Temporal Depth Flickering: Distance reading variance for a stationary person over time.
-Blur Boundary Spikes: The increase in depth error when a face gets closer than 40cm.
-Distance Degradation Steps: Error tracking broken into 0–2m, 2–4m, and 4+m zones.
-
-4. Hardware & System Constraints (DJI Osmo Action 4)
-
-Reprojection Error: Pixel alignment accuracy after correcting the 155° fish-eye lens.
-Inference Latency (FPS): Combined frames processed per second by both models.
-Lux Performance Drop: Accuracy degradation under low or uneven indoor lighting.
+##### Reprojection Error: Pixel alignment accuracy after correcting the 155° fish-eye lens.
+##### Inference Latency (FPS): Combined frames processed per second by both models.
+##### Lux Performance Drop: Accuracy degradation under low or uneven indoor lighting.
