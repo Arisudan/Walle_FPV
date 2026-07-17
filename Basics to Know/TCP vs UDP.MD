@@ -1,116 +1,133 @@
-# 📡 MAVLink (Micro Air Vehicle Link)
+# 🌐 TCP vs UDP
 
-> **MAVLink is a lightweight, open-source communication protocol used for exchanging data between drones, flight controllers, ground control stations, and companion computers.**
+> **TCP and UDP are the two primary transport layer protocols used for data communication over a network.**
 
 ---
 
 ## 🎯 Purpose
 
-- Send commands to the drone
-- Receive telemetry from the drone
-- Configure flight parameters
-- Enable real-time communication between drone components
+| Protocol | Priority |
+|----------|----------|
+| **TCP (Transmission Control Protocol)** | Reliability |
+| **UDP (User Datagram Protocol)** | Speed |
 
 ---
 
-## 🏷️ Why is it called the "HTML of Drones"?
+## ⚖️ TCP vs UDP
 
-Just as **HTML standardizes communication between web browsers and websites**, MAVLink standardizes communication between different drone hardware and software.
+| Feature | TCP | UDP |
+|---------|-----|-----|
+| Connection Type | Connection-Oriented | Connectionless |
+| Reliability | ✅ Guaranteed | ❌ Not Guaranteed |
+| Packet Ordering | ✅ Maintained | ❌ Not Maintained |
+| Error Checking | ✅ Yes | Basic Checksum Only |
+| Retransmission | ✅ Yes | ❌ No |
+| Speed | Slower | Faster |
+| Header Size | 20–60 Bytes | 8 Bytes |
 
-This allows components from different manufacturers to work together seamlessly.
+---
+
+# 🔗 TCP (Transmission Control Protocol)
+
+> **A reliable, connection-oriented protocol that ensures data is delivered completely and in the correct order.**
+
+---
+
+## 📌 How TCP Works
+
+Before sending data, TCP establishes a connection using the **Three-Way Handshake**.
+
+```mermaid
+sequenceDiagram
+    Sender->>Receiver: SYN
+    Receiver->>Sender: SYN-ACK
+    Sender->>Receiver: ACK
+```
+
+After the connection is established, data transmission begins.
 
 ---
 
 ## ⭐ Key Features
 
-| Feature | Description |
-|---------|-------------|
-| **Lightweight** | Optimized for low-bandwidth communication and embedded systems |
-| **Bidirectional** | Supports sending commands and receiving telemetry simultaneously |
-| **Interoperable** | Enables communication between different flight controllers and ground stations |
-| **Customizable** | Supports custom message definitions using XML dialects |
+- Connection-oriented
+- Reliable data delivery
+- Packet acknowledgment
+- Automatic retransmission of lost packets
+- Maintains packet order
 
 ---
 
-## 🔄 Communication Flow
+## 📍 Common Use Cases
 
-```mermaid
-flowchart LR
+- HTTP / HTTPS
+- Email (SMTP)
+- File Transfer (FTP)
+- Online Banking
+- Cloud Storage
 
-GroundStation <--> FlightController
+---
 
-FlightController <--> CompanionComputer
+# ⚡ UDP (User Datagram Protocol)
 
-FlightController <--> Sensors
+> **A fast, connectionless protocol that sends data without guaranteeing delivery or order.**
 
-FlightController <--> ESCs
+---
+
+## 📌 How UDP Works
+
+UDP sends packets directly without establishing a connection.
+
+```text
+Sender
+   │
+   ├── Packet 1 ─────────►
+   ├── Packet 2 ─────────►
+   ├── Packet 3 ─────────►
+   │
+Receiver
 ```
 
----
-
-## 📦 How MAVLink Works
-
-MAVLink exchanges information using **binary messages (packets)**.
-
-Each packet contains:
-
-| Packet Component | Purpose |
-|------------------|---------|
-| **Header** | Sender, receiver and packet information |
-| **Message ID** | Identifies the message type |
-| **Payload** | Actual data being transmitted |
-| **Checksum** | Detects transmission errors |
-
-> 📌 The **Message ID** determines the meaning of the packet.
+No acknowledgments or retransmissions are performed.
 
 ---
 
-## 📍 Example
+## ⭐ Key Features
 
-| Message ID | Purpose |
-|------------|---------|
-| **0** | Heartbeat (system alive) |
-
----
-
-## 🔧 MAVLink Dialects
-
-MAVLink message definitions are stored in **XML dialect files**.
-
-These dialects can be:
-
-- Standard MAVLink messages
-- PX4-specific messages
-- ArduPilot-specific messages
-- Custom project-specific messages
+- Connectionless
+- Very low latency
+- No acknowledgments
+- No retransmissions
+- Lower communication overhead
 
 ---
 
-## 🛰️ Common MAVLink Communication
+## 📍 Common Use Cases
 
-| Sender | Receiver | Data |
-|---------|----------|------|
-| Ground Station | Flight Controller | Commands, Mission Upload |
-| Flight Controller | Ground Station | GPS, Battery, Attitude, Telemetry |
-| Companion Computer | Flight Controller | Vision Data, Navigation Commands |
-| Flight Controller | Companion Computer | Vehicle State, Sensor Data |
+- Live Video Streaming
+- Voice over IP (VoIP)
+- Online Gaming
+- Video Conferencing
+- Telemetry & Sensor Data
 
 ---
 
-## 🖥️ Popular MAVLink Software
+# 🚁 TCP vs UDP in Drones
 
-- **QGroundControl**
-- **Mission Planner**
-- **MAVProxy**
-- **MAVSDK**
-- **DroneKit**
+| Communication | Protocol |
+|---------------|----------|
+| Mission Upload | TCP |
+| Firmware Update | TCP |
+| File Transfer | TCP |
+| Live Video Stream | UDP |
+| Telemetry | UDP (commonly used) |
+| Sensor Data | UDP |
 
 ---
 
 ## 📌 Key Points
 
-- MAVLink is a **communication protocol**, not a flight controller.
-- It uses **binary packets** for efficient communication.
-- Supports **real-time, bidirectional communication**.
-- Works with flight controllers like **PX4** and **ArduPilot**.
-- Enables interoperability between different drone hardware and software.
+- **TCP** → Reliable, ordered, but slower.
+- **UDP** → Fast, lightweight, but unreliable.
+- Choose **TCP** when every packet matters.
+- Choose **UDP** when low latency is more important than guaranteed delivery.
