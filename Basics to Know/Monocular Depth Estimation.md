@@ -1,4 +1,3 @@
-````md
 # 📷 Monocular Depth Estimation (MDE)
 
 > **Monocular Depth Estimation (MDE) is a computer vision technique that estimates the depth (distance) of objects from a single RGB image.**
@@ -105,4 +104,4 @@ A **Depth Map** is the output of an MDE model.
 - The output is a **depth map**, where each pixel represents an estimated distance.
 - Ideal for lightweight UAVs due to its low hardware requirements.
 - Widely used for obstacle avoidance and autonomous navigation.
-````
+
