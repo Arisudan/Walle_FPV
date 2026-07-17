@@ -1,27 +1,57 @@
 # 📏 Evaluation Metrics
 
-Evaluating a depth estimation model requires measuring how accurately it predicts the distance between the camera and every pixel in an image. Since different models produce either **relative** or **metric (absolute)** depth, several evaluation metrics are used to compare their performance.
+Depth estimation models are evaluated using standardized metrics that measure how accurately they predict the distance between the camera and objects in a scene.
+
+Unlike image classification, there is no single metric that fully describes model performance. Instead, multiple complementary metrics are used to evaluate:
+
+- Overall prediction accuracy
+- Relative depth consistency
+- Boundary preservation
+- Absolute distance estimation
+- Computational efficiency
+- Real-time capability
 
 ---
 
 # 🎯 Why Evaluation Metrics Matter
 
-A model may generate visually appealing depth maps but still perform poorly in real-world robotics or autonomous navigation. Evaluation metrics provide a quantitative way to compare models based on:
+A visually appealing depth map does **not** always indicate an accurate model.
 
-- Prediction accuracy
-- Distance estimation error
-- Edge preservation
-- Boundary sharpness
-- Computational efficiency
-- Real-time capability
+For robotics and autonomous systems, depth predictions must be:
 
-These metrics help determine which model is best suited for a particular application.
+- Accurate
+- Consistent
+- Fast
+- Robust
+
+Evaluation metrics provide an objective way to compare different models under identical benchmark datasets.
 
 ---
 
-# 📊 Types of Evaluation Metrics
+# 📊 Evaluation Pipeline
 
-Depth estimation metrics are generally divided into two categories:
+```mermaid
+flowchart LR
+
+A[RGB Image]
+-->B[Depth Estimation Model]
+
+B-->C[Predicted Depth Map]
+
+D[Ground Truth Depth]
+
+C-->E[Evaluation Metrics]
+
+D-->E
+
+E-->F[Performance Score]
+```
+
+---
+
+# 📚 Categories of Metrics
+
+Depth estimation metrics are generally divided into two groups.
 
 ## 1. Monocular Depth Metrics
 
@@ -38,7 +68,7 @@ Examples:
 
 ## 2. Stereo Depth Metrics
 
-Used for models that estimate depth from **two synchronized camera images**.
+Used for stereo camera systems.
 
 Example:
 
@@ -46,59 +76,133 @@ Example:
 
 ---
 
-# 📈 Common Monocular Metrics
+# 📐 Monocular Evaluation Metrics
 
-## 1. Absolute Relative Error (AbsRel)
+## 1️⃣ Absolute Relative Error (AbsRel)
 
-Measures the average relative difference between the predicted depth and the actual (ground truth) depth.
+AbsRel measures the average relative difference between the predicted depth and the ground-truth depth.
 
 ### Formula
 
-```text
-AbsRel = |Predicted - Ground Truth| / Ground Truth
-```
+\[
+AbsRel = \frac{1}{N}\sum \frac{|D_{pred}-D_{gt}|}{D_{gt}}
+\]
 
 ### Interpretation
 
-- Lower value = Better model
-- Measures overall depth accuracy
-- Sensitive to large prediction errors
+✅ Lower is better
 
-### Typical Performance
+A lower AbsRel means the predicted depth values are closer to the actual distances.
+
+### Typical Values
 
 | Performance | AbsRel |
 |-------------|---------|
-| Excellent | < 0.07 |
-| Very Good | 0.07 – 0.10 |
-| Good | 0.10 – 0.15 |
-| Average | > 0.15 |
+| Excellent | <0.07 |
+| Very Good | 0.07–0.10 |
+| Good | 0.10–0.15 |
+| Poor | >0.15 |
 
 ---
 
-## 2. δ₁ Accuracy (Delta Accuracy)
+## 2️⃣ Squared Relative Error (SqRel)
 
-Measures the percentage of pixels whose predicted depth lies within **25%** of the ground truth.
+SqRel penalizes larger prediction errors more heavily than AbsRel.
+
+### Formula
+
+\[
+SqRel=\frac{1}{N}\sum \frac{(D_{pred}-D_{gt})^2}{D_{gt}}
+\]
+
+### Interpretation
+
+Lower values indicate:
+
+- Better long-range prediction
+- Smaller large-distance errors
+
+---
+
+## 3️⃣ Root Mean Square Error (RMSE)
+
+RMSE measures the overall magnitude of prediction errors.
+
+### Formula
+
+\[
+RMSE=\sqrt{\frac{1}{N}\sum(D_{pred}-D_{gt})^2}
+\]
+
+### Characteristics
+
+- Penalizes large errors
+- Sensitive to outliers
+- Widely used across KITTI and NYUv2 benchmarks
+
+Lower RMSE indicates better depth estimation.
+
+---
+
+## 4️⃣ RMSE (Log)
+
+Instead of comparing depth directly, RMSE(Log) compares logarithmic depth values.
+
+Advantages:
+
+- Better evaluation over large depth ranges
+- Less sensitive to scale differences
+- Commonly reported in monocular depth papers
+
+Lower values are better.
+
+---
+
+## 5️⃣ Threshold Accuracy (δ)
+
+Threshold Accuracy evaluates how many predicted pixels fall within a specified error threshold.
+
+Three commonly reported values are:
+
+- δ₁
+- δ₂
+- δ₃
+
+### δ₁
+
+A prediction is considered correct when
+
+```
+max(
+Prediction / Ground Truth,
+Ground Truth / Prediction
+) < 1.25
+```
 
 ### Interpretation
 
 Higher is better.
 
-Example
+Example:
 
 ```
-δ₁ = 96%
+δ₁ = 95%
 
-Meaning:
+↓
 
-96% of all pixels
-are predicted within
-25% of the true depth.
+95% of all pixels
+
+are within
+
+25%
+
+of the true depth.
 ```
 
-### Typical Performance
+Typical performance:
 
 | Performance | δ₁ |
-|-------------|-----|
+|-------------|------|
 | Excellent | >95% |
 | Very Good | 90–95% |
 | Good | 85–90% |
@@ -106,167 +210,167 @@ are predicted within
 
 ---
 
-## 3. Root Mean Square Error (RMSE)
+# 📊 Understanding δ Metrics
 
-Measures the average magnitude of prediction error.
+| Metric | Threshold |
+|---------|-----------|
+| δ₁ | 1.25 |
+| δ₂ | 1.25² |
+| δ₃ | 1.25³ |
 
-### Formula
+δ₂ and δ₃ use progressively larger tolerances.
 
-```text
-RMSE = √((Prediction − Ground Truth)²)
+Therefore,
+
+```
+δ₃
+
+≥
+
+δ₂
+
+≥
+
+δ₁
 ```
 
-### Interpretation
-
-Lower RMSE indicates better predictions.
-
-RMSE penalizes large errors more heavily than AbsRel, making it useful for evaluating robustness.
+Higher values always indicate better performance.
 
 ---
 
-## 4. Log RMSE
+## 6️⃣ Boundary F1 Score
 
-Instead of comparing absolute depth values, Log RMSE compares logarithmic depth values.
+Boundary F1 measures how accurately a model preserves object boundaries.
 
-Useful when evaluating scenes with:
-
-- Very near objects
-- Very distant objects
-- Wide depth ranges
-
-Lower values indicate better performance.
-
----
-
-## 5. F1 Boundary Score
-
-Measures how accurately a model preserves object boundaries in the generated depth map.
-
-Instead of evaluating every pixel, this metric focuses on edges.
+Instead of evaluating all pixels equally, it focuses on edges.
 
 Example:
 
 ```
-Tree
+Person
 
 ███████
 
-Sharp boundary ✓
+Sharp Boundary ✓
 
-Blurred boundary ✗
+Blurred Boundary ✗
 ```
 
-Higher values indicate better boundary preservation.
+Higher F1 indicates:
 
-Important for:
+- Sharper object edges
+- Better thin-structure prediction
+- Improved segmentation quality
+
+This metric is especially important for:
 
 - Robotics
-- Object grasping
-- Image segmentation
+- Manipulation
+- Autonomous driving
 - Scene reconstruction
 
 ---
 
-# 📊 Stereo Depth Metrics
+# 📷 Stereo Evaluation Metrics
 
-Stereo models predict disparity before converting it into depth.
+Stereo models estimate disparity before converting it into depth.
 
 Different evaluation metrics are therefore used.
 
 ---
 
-## 1. BP-2 (Bad Pixel 2)
+## 1️⃣ BP-2 (Bad Pixel 2)
 
-Measures the percentage of pixels whose disparity error exceeds **2 pixels**.
+BP-2 measures the percentage of pixels with disparity errors greater than **2 pixels**.
 
-Lower is better.
-
-Example
+Example:
 
 ```
-100 pixels
+100 Pixels
 
-Only 1 incorrect
+1 Incorrect
+
+↓
 
 BP-2 = 1%
 ```
 
-A lower BP-2 indicates more reliable stereo matching.
+Lower values indicate more accurate stereo matching.
 
 ---
 
-## 2. D1 Error
+## 2️⃣ D1 Error
 
-Measures the percentage of pixels whose disparity error is:
+D1 measures the percentage of pixels whose disparity error exceeds:
 
-- Greater than 3 pixels
-- AND greater than 5% of the ground truth disparity
+- 3 pixels
+- AND
+- 5% of the true disparity
 
-Widely used for evaluating:
+This is the primary metric used by the KITTI Stereo Benchmark.
 
-- KITTI
-- Autonomous driving
-- Robotics
-
-Lower values indicate higher accuracy.
+Lower is better.
 
 ---
 
-## 3. End Point Error (EPE)
+## 3️⃣ End Point Error (EPE)
 
-Measures the average disparity error for every pixel.
+EPE computes the average disparity error across all pixels.
 
-```text
-EPE = Average Pixel Error
+```
+Predicted Disparity
+
+↓
+
+Ground Truth
+
+↓
+
+Average Pixel Error
 ```
 
-Lower values indicate more precise disparity estimation.
+Lower values indicate better stereo estimation.
 
 ---
 
-# 📷 Relative Depth vs Metric Depth
+# 📊 Relative Depth vs Metric Depth
 
-One of the biggest differences between depth estimation models is the type of depth they produce.
+One of the biggest differences between depth models is the type of depth they produce.
 
 ---
 
 ## Relative Depth
 
-Relative depth only predicts which objects are closer or farther.
+Relative depth predicts:
+
+- Which objects are nearer
+- Which objects are farther
+
+It does **not** estimate the actual physical distance.
 
 Example
 
 ```
 Person
 
+↓
+
+Closest
+
 Car
+
+↓
+
+Farther
 
 Building
 
-Result:
+↓
 
-Person → Closest
-
-Car → Medium
-
-Building → Farthest
+Farthest
 ```
 
-Actual distance is unknown.
-
-Cannot determine whether the person is:
-
-- 2 meters away
-- 20 meters away
-
-Relative depth is sufficient for:
-
-- Object ordering
-- Scene understanding
-- Image editing
-- Background removal
-
-Models:
+Models
 
 - MiDaS
 - Depth Anything V2
@@ -277,7 +381,7 @@ Models:
 
 ## Metric Depth
 
-Metric depth predicts actual physical distance.
+Metric depth predicts actual distance.
 
 Example
 
@@ -286,30 +390,30 @@ Person
 
 ↓
 
-2.34 m
+2.4 m
 
 Car
 
 ↓
 
-8.91 m
+9.2 m
 
 Building
 
 ↓
 
-42.7 m
+38.5 m
 ```
 
-This is essential for:
+Essential for
 
 - Robotics
 - Drone navigation
-- Autonomous driving
 - SLAM
-- Obstacle avoidance
+- Autonomous driving
+- Industrial automation
 
-Models:
+Models
 
 - Depth Pro
 - FoundationStereo
@@ -318,101 +422,100 @@ Models:
 
 # ⚡ Inference Speed
 
-Besides accuracy, speed is one of the most important evaluation criteria.
+Real-world systems require both accuracy and speed.
 
-Real-time systems typically require:
+Approximate frame rates:
 
-| Application | Desired FPS |
-|-------------|-------------|
-| Mobile Robots | >20 FPS |
-| Autonomous Cars | >30 FPS |
-| FPV Drones | >30 FPS |
-| Embedded Systems | >15 FPS |
-
-Approximate relationship:
-
-| Time per Frame | FPS |
-|----------------|-----|
+| Time | FPS |
+|------|------|
 | 1000 ms | 1 FPS |
 | 500 ms | 2 FPS |
 | 100 ms | 10 FPS |
+| 50 ms | 20 FPS |
 | 33 ms | 30 FPS |
 | 16 ms | 60 FPS |
 
-A highly accurate model may not be suitable if it cannot meet real-time processing requirements.
+For embedded robotics:
+
+| Application | Target FPS |
+|-------------|------------|
+| Mobile Robots | >20 FPS |
+| Autonomous Cars | >30 FPS |
+| FPV Drones | >30 FPS |
+| Edge AI | >15 FPS |
 
 ---
 
 # 🗂 Common Benchmark Datasets
 
-Researchers evaluate depth estimation models using publicly available datasets.
+Most research papers evaluate models using publicly available datasets.
 
-| Dataset | Primary Use |
-|---------|-------------|
-| KITTI | Autonomous driving |
-| NYUv2 | Indoor depth estimation |
-| ETH3D | Indoor & outdoor stereo |
-| ScanNet | Indoor scene reconstruction |
-| Sun RGB-D | Indoor robotics |
-| Sintel | Synthetic video evaluation |
-| Scene Flow | Stereo depth estimation |
-| Middlebury | High-precision stereo evaluation |
-
-These datasets provide ground truth depth maps for fair and standardized comparisons.
+| Dataset | Environment | Primary Use |
+|---------|-------------|-------------|
+| KITTI | Outdoor | Autonomous Driving |
+| NYUv2 | Indoor | RGB-D Depth Estimation |
+| ETH3D | Indoor + Outdoor | High-Accuracy Stereo |
+| ScanNet | Indoor | Scene Reconstruction |
+| SUN RGB-D | Indoor | Robotics |
+| Sintel | Synthetic | Video Depth |
+| Scene Flow | Synthetic | Stereo Matching |
+| Middlebury | Indoor | Stereo Evaluation |
 
 ---
 
-# 📊 Summary of Evaluation Metrics
+# 📋 Metric Summary
 
-| Metric | Better Value | Purpose |
-|---------|--------------|---------|
-| AbsRel | Lower | Relative depth accuracy |
+| Metric | Better Value | Measures |
+|---------|--------------|----------|
+| AbsRel | Lower | Relative depth error |
+| SqRel | Lower | Large depth errors |
 | RMSE | Lower | Overall prediction error |
-| Log RMSE | Lower | Large depth range evaluation |
-| δ₁ | Higher | Percentage of accurate pixels |
-| F1 | Higher | Boundary preservation |
+| RMSE(Log) | Lower | Scale-aware error |
+| δ₁ | Higher | Accurate pixels |
+| δ₂ | Higher | Moderate threshold accuracy |
+| δ₃ | Higher | Relaxed threshold accuracy |
+| Boundary F1 | Higher | Edge quality |
 | BP-2 | Lower | Stereo disparity error |
 | D1 | Lower | KITTI stereo accuracy |
 | EPE | Lower | Average disparity error |
 
 ---
 
-# 💡 Choosing the Right Metric
-
-Different applications prioritize different metrics.
+# 💡 Which Metrics Matter Most?
 
 | Application | Important Metrics |
 |-------------|------------------|
-| Robotics | AbsRel, δ₁, Speed |
+| Robotics | AbsRel, δ₁, FPS |
 | Autonomous Driving | D1, BP-2, EPE |
-| Drone Navigation | AbsRel, δ₁, FPS |
-| AR / VR | F1, RMSE |
-| 3D Reconstruction | F1, RMSE |
-| Video Processing | Temporal consistency, FPS |
+| FPV Drones | AbsRel, FPS |
+| AR / VR | RMSE, Boundary F1 |
+| 3D Reconstruction | RMSE, F1 |
+| Video Depth | Temporal Consistency, FPS |
 
 ---
 
 # 📌 Key Takeaways
 
-- **AbsRel** evaluates overall depth accuracy.
-- **δ₁** measures the percentage of correctly estimated pixels.
-- **F1** evaluates boundary sharpness.
-- **RMSE** measures the average prediction error.
-- **BP-2**, **D1**, and **EPE** are used for stereo depth estimation.
-- **Inference speed** is critical for real-time applications such as robotics and autonomous drones.
+- **AbsRel** measures overall prediction accuracy.
+- **RMSE** evaluates the magnitude of depth errors.
+- **δ metrics** indicate the percentage of correctly estimated pixels.
+- **Boundary F1** evaluates edge preservation.
+- **BP-2**, **D1**, and **EPE** are specific to stereo depth estimation.
+- **Inference speed** is equally important for real-time robotic systems.
 
 ---
 
 # ➡ Next Section
 
-The next part provides an in-depth overview of **Depth Anything V2**, including:
+The next chapter introduces **Depth Anything V2**, covering:
 
+- Model Overview
 - Architecture
 - Working Principle
-- Training Strategy
+- Training Pipeline
 - Model Variants
 - Strengths
 - Weaknesses
 - Benchmark Performance
-- Applications
 - Deployment Recommendations
+- Real-world Applications
