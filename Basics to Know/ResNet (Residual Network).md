@@ -15,7 +15,7 @@
 
 ## 🔄 How ResNet Works
 
-Instead of learning the entire output, ResNet learns the **residual (difference)** between the input and the desired output.
+Instead of learning the entire output, ResNet learns the **residual (difference)** between the *input* and the *desired output*.
 
 It achieves this using **Residual Blocks** and **Skip Connections**.
 
