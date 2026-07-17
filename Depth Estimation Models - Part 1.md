@@ -3,7 +3,7 @@
 > A comprehensive guide to modern deep learning models for monocular, video, and stereo depth estimation.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
-![PyTorch](https://img.shields.io/badge/PyTorch-Deep_Learning-red.svg)
+![PyTorch](https://img.shields.io/badge/PyTorch-Deep%20Learning-red.svg)
 ![Computer Vision](https://img.shields.io/badge/Computer-Vision-success)
 ![Robotics](https://img.shields.io/badge/Robotics-Autonomous-orange)
 ![License](https://img.shields.io/badge/Documentation-Open--Source-brightgreen)
@@ -12,43 +12,62 @@
 
 # 📖 Table of Contents
 
-- [Introduction](#-introduction)
-- [What is Depth Estimation?](#-what-is-depth-estimation)
-- [Why is Depth Estimation Important?](#-why-is-depth-estimation-important)
-- [Types of Depth Estimation](#-types-of-depth-estimation)
-- [Applications](#-applications)
-- [General Workflow](#-general-workflow)
-- [Challenges](#-key-challenges)
-- [Next Section](#-next-section)
+- Introduction
+- What is Depth Estimation?
+- Why is Depth Estimation Important?
+- Types of Depth Estimation
+- Applications
+- Workflow
+- Key Challenges
+- Official Resources
 
 ---
 
 # 📚 Introduction
 
-Depth estimation is one of the fundamental perception tasks in computer vision that enables machines to understand the **three-dimensional structure** of a scene from one or more images.
+Depth estimation is one of the core perception tasks in computer vision. It enables machines to estimate the distance between the camera and every visible point in a scene, allowing them to understand the three-dimensional structure of the environment.
 
-Unlike traditional image recognition, which identifies **what** is present in an image, depth estimation determines **how far** every object is from the camera. The result is represented as a **depth map**, where each pixel stores an estimated distance value.
+Unlike object detection or image classification, which identify **what** is present in an image, depth estimation answers **how far** each object is from the camera.
 
-This capability is essential for systems that must safely interact with their surroundings, including autonomous vehicles, mobile robots, drones, augmented reality devices, and industrial automation systems.
+The output is a **Depth Map**, where every pixel represents an estimated depth value.
+
+Depth estimation plays a crucial role in:
+
+- 🤖 Robotics
+- 🚗 Autonomous Driving
+- 🚁 UAVs & FPV Drones
+- 🛰 SLAM
+- 🥽 Augmented & Virtual Reality
+- 🏗 3D Reconstruction
+- 🏭 Industrial Automation
 
 ---
 
 # 🖼 What is Depth Estimation?
 
-Depth estimation is the process of predicting the distance between the camera and every visible point in an image.
+Depth estimation predicts the distance between the camera and every pixel in an image.
 
-The output is known as a **depth map**.
+The output is called a **Depth Map**.
 
-- **Bright pixels** → Closer objects
-- **Dark pixels** → Farther objects
+```
+RGB Image
+        │
+        ▼
+Depth Estimation Model
+        │
+        ▼
+Depth Map
+```
 
-## Example
+Typical visualization:
 
-| RGB Image | Estimated Depth Map |
-|-----------|---------------------|
-| ![RGB Example](https://raw.githubusercontent.com/isl-org/MiDaS/master/assets/examples/input.jpg) | ![Depth Map](https://raw.githubusercontent.com/isl-org/MiDaS/master/assets/examples/dpt_large_monodepth.jpg) |
+```
+White  → Near Objects
 
-**Image Source:** MiDaS Official Repository
+Gray   → Medium Distance
+
+Black  → Far Objects
+```
 
 ---
 
@@ -56,60 +75,53 @@ The output is known as a **depth map**.
 
 Traditional computer vision answers:
 
-> **"What is this object?"**
+> "What is this object?"
 
 Depth estimation additionally answers:
 
-> **"How far away is this object?"**
+> "How far away is this object?"
 
-This additional information enables machines to understand:
+This enables autonomous systems to understand:
 
-- Object distance
 - Scene geometry
-- Navigable free space
-- Obstacle locations
+- Free navigable space
 - Relative object positions
-- Environmental structure
+- Obstacle distance
+- Safe navigation paths
 
-Without depth information, autonomous systems cannot accurately estimate collision risks or navigate complex environments.
+Without depth information, robots and autonomous vehicles cannot accurately estimate distances or avoid collisions.
 
 ---
 
 # 🧠 Types of Depth Estimation
 
-Modern deep learning methods can be divided into three categories.
-
 ## 1️⃣ Monocular Depth Estimation
 
-Uses a **single RGB camera**.
+Uses **one RGB camera**.
 
-```text
+```
 RGB Image
-     │
-     ▼
- Feature Extractor
-     │
-     ▼
- Deep Neural Network
-     │
-     ▼
- Relative / Metric Depth Map
+      │
+      ▼
+ Neural Network
+      │
+      ▼
+ Relative / Metric Depth
 ```
 
 ### Advantages
 
-- Only one camera required
 - Low hardware cost
 - Easy deployment
+- Lightweight
 - Suitable for embedded systems
 
 ### Limitations
 
 - Scale ambiguity
-- Absolute distance is difficult to estimate
-- Performance depends heavily on training data
+- Harder to estimate absolute distances
 
-### Popular Models
+Popular models:
 
 - Depth Anything V2
 - MiDaS
@@ -120,35 +132,31 @@ RGB Image
 
 ## 2️⃣ Stereo Depth Estimation
 
-Uses **two synchronized cameras** separated by a fixed baseline.
+Uses **two synchronized cameras**.
 
-```text
-Left Image      Right Image
-      \          /
-       \        /
-        ▼      ▼
-     Stereo Matching
-             │
-             ▼
-        Disparity Map
-             │
-             ▼
-        Metric Depth
+```
+Left Camera
+       \
+        \
+         ▼
+ Stereo Matching
+         │
+         ▼
+ Metric Depth
 ```
 
 ### Advantages
 
 - True metric depth
-- High geometric accuracy
-- Excellent for robotics
+- Excellent geometric accuracy
+- Ideal for robotics
 
 ### Limitations
 
-- Requires camera calibration
+- Camera calibration required
 - Higher computational cost
-- Increased hardware complexity
 
-### Popular Model
+Popular model:
 
 - FoundationStereo
 
@@ -156,33 +164,25 @@ Left Image      Right Image
 
 ## 3️⃣ Video Depth Estimation
 
-Processes a sequence of video frames instead of a single image.
+Processes a sequence of video frames.
 
-```text
-Frame 1
-Frame 2
-Frame 3
-Frame 4
-    │
-    ▼
- Temporal Feature Learning
-    │
-    ▼
- Consistent Depth Maps
+```
+Frame Sequence
+       │
+       ▼
+Temporal Network
+       │
+       ▼
+Consistent Depth Maps
 ```
 
 ### Advantages
 
-- Smooth predictions
+- Temporal consistency
 - Reduced flickering
-- Motion-aware depth estimation
+- Stable predictions
 
-### Limitations
-
-- More computationally intensive
-- Requires temporal modeling
-
-### Popular Model
+Popular model:
 
 - DepthCrafter
 
@@ -190,20 +190,17 @@ Frame 4
 
 # 🌍 Applications
 
-Depth estimation is widely used in modern AI and robotics.
-
-| Domain | Example Applications |
-|---------|---------------------|
-| 🚗 Autonomous Driving | Obstacle avoidance, lane understanding |
-| 🤖 Robotics | Navigation, manipulation |
-| 🚁 FPV Drones | Terrain following, autonomous flight |
-| 🛰 SLAM | Localization and mapping |
-| 🏗 3D Reconstruction | Digital twins, photogrammetry |
-| 🥽 Augmented Reality | Scene understanding |
-| 🏭 Industrial Automation | Robot inspection |
-| 🌾 Agriculture | Crop monitoring |
-| 🏥 Healthcare | Surgical navigation |
-| 📷 Smart Surveillance | Human localization |
+| Domain | Applications |
+|---------|--------------|
+| 🤖 Robotics | Navigation, Manipulation |
+| 🚗 Autonomous Driving | Obstacle Avoidance |
+| 🚁 FPV Drones | Terrain Following |
+| 🛰 SLAM | Localization & Mapping |
+| 🏗 3D Reconstruction | Digital Twins |
+| 🥽 AR / VR | Scene Understanding |
+| 🏭 Industrial Automation | Inspection Robots |
+| 🌾 Agriculture | Crop Monitoring |
+| 🏥 Healthcare | Surgical Navigation |
 
 ---
 
@@ -212,85 +209,92 @@ Depth estimation is widely used in modern AI and robotics.
 ```mermaid
 flowchart LR
 
-A[RGB Image] --> B[Preprocessing]
+A[RGB Image]
+-->B[Preprocessing]
 
-B --> C[Depth Estimation Model]
+B-->C[Depth Estimation Model]
 
-C --> D[Depth Map]
+C-->D[Depth Map]
 
-D --> E[Post Processing]
+D-->E[Post Processing]
 
-E --> F[Navigation]
+E-->F[Navigation]
 
-E --> G[SLAM]
+E-->G[SLAM]
 
-E --> H[Obstacle Avoidance]
+E-->H[Obstacle Avoidance]
 
-E --> I[3D Reconstruction]
+E-->I[3D Reconstruction]
 ```
 
 ---
 
-# 🏗 High-Level Network Architecture
+# 🏗 High-Level Architecture
 
 ```mermaid
 flowchart TB
 
 A[Input Image]
 
-A --> B[Backbone CNN / Vision Transformer]
+A --> B[Backbone Encoder]
 
-B --> C[Multi-scale Feature Extraction]
+B --> C[Feature Extraction]
 
-C --> D[Feature Fusion]
+C --> D[Multi-scale Feature Fusion]
 
-D --> E[Depth Prediction Head]
+D --> E[Depth Decoder]
 
-E --> F[Estimated Depth Map]
+E --> F[Depth Map]
 ```
 
 ---
 
 # ⚠ Key Challenges
 
-Depth estimation remains an active research area due to several difficult real-world conditions.
+Real-world depth estimation remains challenging due to:
 
 - Dynamic scenes
-- Transparent objects
-- Reflective surfaces
-- Thin structures
 - Motion blur
-- Occlusions
-- Poor lighting
-- Scale ambiguity
-- Weather effects
+- Reflective surfaces
+- Transparent objects
+- Thin structures
 - Textureless regions
+- Lighting variations
+- Scale ambiguity
+- Occlusions
 
-Different models use different architectures and training strategies to overcome these challenges.
-
----
-
-# 📌 Summary
-
-| Category | Examples |
-|-----------|----------|
-| Monocular | Depth Anything V2, MiDaS, Depth Pro, Marigold |
-| Video | DepthCrafter |
-| Stereo | FoundationStereo |
-
-Each model is optimized for different applications depending on speed, accuracy, hardware availability, and deployment requirements.
+Modern foundation models address these challenges using large-scale training datasets, Vision Transformers (ViTs), diffusion models, and multi-scale feature fusion.
 
 ---
 
-# ➡ Next Section
+# 📂 Official Resources
 
-The next part covers:
+The following links provide the official papers, repositories, demos, and project pages for the models covered in this documentation.
+
+| Model | Official Repository | Project Page | Paper |
+|--------|---------------------|--------------|-------|
+| Depth Anything V2 | https://github.com/DepthAnything/Depth-Anything-V2 | https://depth-anything-v2.github.io | https://arxiv.org/abs/2406.09414 |
+| MiDaS | https://github.com/isl-org/MiDaS | — | https://arxiv.org/abs/1907.01341 |
+| DepthCrafter | https://github.com/Tencent/DepthCrafter *(or official repository if updated)* | See project page | Official paper |
+| Depth Pro | https://github.com/apple/ml-depth-pro | https://apple.github.io/ml-depth-pro/ | Official paper |
+| Marigold | https://github.com/prs-eth/Marigold | https://marigoldmonodepth.github.io/ | Official paper |
+| FoundationStereo | Official GitHub repository | Official project page | Official paper |
+
+---
+
+# 📌 Notes
+
+Instead of embedding remote images (which often break over time), this documentation references the official repositories and project pages maintained by the model authors. In the following sections, architecture figures, qualitative results, and benchmark images can be downloaded from those official sources and stored locally in your repository (e.g., `images/depth-anything-v2/architecture.png`) for stable rendering.
+
+---
+
+# ➡ Next
+
+Part 2 covers:
 
 - Evaluation Metrics
 - Benchmark Datasets
-- Accuracy Measures
-- Speed Metrics
 - Relative vs Metric Depth
-- Benchmark Comparison Tables
-
-Following that, each model will be explained in detail, including its architecture, strengths, weaknesses, benchmarks, and recommended use cases.
+- Accuracy Metrics
+- Inference Speed
+- Model Evaluation Criteria
