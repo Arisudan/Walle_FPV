@@ -4,7 +4,7 @@
 Link: [https://projects.asl.ethz.ch/datasets/euroc-mav/](https://projects.asl.ethz.ch/datasets/euroc-mav/)
 
 ---
-## 2. LongBot:
+## 2. LingBot:
 Link: [https://github.com/robbyant/lingbot-map](https://github.com/robbyant/lingbot-map)
 
 ---
