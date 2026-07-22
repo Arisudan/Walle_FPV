@@ -16,26 +16,34 @@ where,
  * GT &rarr; Number of Ground Truth Objects
 
 ----
-### a. False Positives (FP): 
-When the algorithm detects an object that isn't actually there.
+**False Positives (FP)**: When the algorithm detects an object that isn't actually there.
 
----
-### b. False Negatives (FN / Misses): 
-When the algorithm fails to detect an object that is in the ground truth data.
+**False Negatives (FN / Misses)**: When the algorithm fails to detect an object that is in the ground truth data.
 
----
-### c. Identity Switches (IDSW): 
-When the algorithm incorrectly swaps the ID of an object (e.g., confusing "Person A" with "Person B" during a crossover).
+**Identity Switches (IDSW)**: When the algorithm incorrectly swaps the ID of an object (e.g., confusing "Person A" with "Person B" during a crossover).
 
 ----
 
 #### MOTA Score = **~1.0** (or 100%) &rarr; Highly Accurate Tracking System
 
 ---
-## . Multiple-Object Tracking Precision:
+## 2. Multiple-Object Tracking Precision (MOTP):
 
- * An evaluation metric that measures how accurately a tracking algorithm localizes multiple moving objects in a video sequence.
+ * An evaluation metric that measures **how accurately a tracking algorithm localizes *multiple moving objects*** in a *video sequence*.
 
+<img width="370" height="82" alt="image" src="https://github.com/user-attachments/assets/e3613a7f-dec9-493c-9d1d-cb7bc8447896" />
+
+Where,
+FA &rarr; Number of False Alarms 
+TP &rarr; Number of True Positives
+FP 7arr; False Positive
+
+MOTP calculates the **average distance** or **bounding box mismatch** between your ***model's predicted object locations*** and the ***actual ground-truth objects***.
+
+**Calculation**: Uses the ***Intersection-over-Union (IoU)*** metric or ***Pixel-level Euclidean distance*** for correctly matched pairs.
+
+---
+### MOTP Score &rarr; Lower Error (&darr;)/Higher IOU (&uarr;) &rarr; Highly Accurate Precision System
 ---
 ## MOTA vs MOTP:
 | Metric | Full Name | Primary Focus | Issues Tracked | Ignored Issues |
