@@ -57,7 +57,7 @@ MOTP calculates the **average distance** or **bounding box mismatch** between yo
 ## 3. Identity Switch (IDsw/Mismatch):
  * An Identity Switch occurs when a **tracking algorithm** *incorrectly assigns* a ***different tracking ID*** to the *exact same physical object* ***over time***.
  
-<img width="716" height="98" alt="image" src="https://github.com/user-attachments/assets/316abbea-7541-45b0-9f29-ff7e34c6e72e" />
+<img width="370" height="95" alt="image" src="https://github.com/user-attachments/assets/316abbea-7541-45b0-9f29-ff7e34c6e72e" />
 
 Where,
 * IDsw_rate &rarr; Rate of Identity Switches
@@ -81,16 +81,22 @@ Where,
 * It quantifies how often the model is correct when it predicts a positive outcome.
 
 
-<img width="245" height="83" alt="image" src="https://github.com/user-attachments/assets/8789911d-1e01-4929-91c5-5a3cced8d737" />
+<img width="245" height="95" alt="image" src="https://github.com/user-attachments/assets/8789911d-1e01-4929-91c5-5a3cced8d737" />
 
 Where,
-TP &rarr; Number of correctly predicted Positive Instances
-FP &rarr; Number of incorrectly predicted Positive Instances.
+* TP &rarr; Number of correctly predicted Positive Instances
+* FP &rarr; Number of incorrectly predicted Positive Instances.
 
 ---
 ## 5. Recall:
-* dvdf
-* 
+* Measures the proportion of true positive predictions among all actual positive instances in the dataset.
+* It quantifies how well the model identifies all positive cases.
+
+<img width="222" height="71" alt="image" src="https://github.com/user-attachments/assets/9a62af6d-58ce-44ed-85aa-a336d184dbae" />
+
+Where,
+* FN &rarr; Number of incorrectly predicted Negative Instances.
+
 ---
 ## . Ground Truth
  * Ground Truth refers to the verified, **accurate data** used as a *benchmark to train* and *evaluate algorithms*. 
