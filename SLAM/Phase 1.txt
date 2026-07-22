@@ -1,0 +1,27 @@
+Here is the confirmation checklist of what has been implemented and tested:
+
+D-Drive Isolation (Space Saving):
+Created the virtual environment venv on your D drive (consuming ~972 MB on D: and 0 MB on C:).
+Set up programmatic cache overrides so that Depth Anything V2's model weights download and cache entirely inside d:\Drone Projects\SLAM-With-D435i-And-T265\.cache (~95 MB on D: and 0 MB on C:).
+Model Integration (
+
+scripts/depth_estimator.py
+):
+Successfully loads Hugging Face's Depth Anything V2 Small model.
+Accurately predicts dense depth maps from RGB frame inputs.
+Edge & 3D Mapping Pipeline (
+
+scripts/test_on_image.py
+):
+Applies OpenCV Canny edge detection (
+
+detected_edges.jpg
+).
+Applies the edge mask to the depth map (
+
+depth_map.jpg
+) to perform sparsing.
+Back-projects 2D $(u, v, d)$ pixels to 3D coordinates $(X, Y, Z)$ using intrinsic camera parameters.
+Feeds the 12,922 projected points into Open3D.
+Desktop Visualization:
+Successfully loaded and verified the interactive 3D visualizer showing the sparse edge structures directly in your local desktop session.
