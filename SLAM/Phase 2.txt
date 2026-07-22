@@ -1,0 +1,36 @@
+ Phase 2: Monocular Visual Odometry (MVO):
+
+Why do we need Visual Odometry?
+For SLAM to build a 3D map, it needs to know where the camera is in 3D space for every single frame. Since we do not have a physical tracking camera (like the T265) or ROS, we will write a visual tracker in pure Python using OpenCV.
+
+Step-by-Step MVO Pipeline
+mermaid
+graph TD
+    A[Read Frame t & Frame t+1] --> B[Detect ORB/SIFT Keypoints in Frame t]
+    B --> C[Track Keypoints in Frame t+1 using Optical Flow]
+    C --> D[Calculate Essential Matrix RANSAC]
+    D --> E[Recover Pose: Rotation R, Translation t]
+    E --> F[Integrate relative Pose into Global Camera Pose]
+Step 2.1: Feature Detection & Tracking
+Detect Features (Frame $t$): Find sharp, trackable features (like corners, edges, or high-contrast spots) in the image using Fast/ORB features:
+python
+detector = cv2.FastFeatureDetector_create(threshold=25)
+keypoints = detector.detect(frame_gray)
+Track Features (Frame $t+1$): Track where these points moved in the next frame using Lucas-Kanade Optical Flow (cv2.calcOpticalFlowPyrLK). This is much faster and more continuous than re-detecting and matching descriptors from scratch.
+Step 2.2: Finding the Relative Motion (The Math)
+Once we know where the feature points moved from Frame $t \rightarrow t+1$:
+
+Calculate Essential Matrix ($E$): We pass the matched points to OpenCV's cv2.findEssentialMat. It uses RANSAC (Random Sample Consensus) to ignore "bad matches" (like moving shadows or people walking) and calculates the geometric projection matrix.
+Recover Pose ($R, t$): We decompose the Essential Matrix using cv2.recoverPose. This extracts:
+Rotation Matrix ($R$): The 3D rotation of the camera between the two frames.
+Translation Vector ($t$): The 3D direction vector showing where the camera moved.
+Step 2.3: Pose Integration (Accumulating the Path)
+We keep a running total of the camera's position (self.cur_t) and orientation (self.cur_R). For every new frame, we update them using: $$\text{Position}{global} = \text{Position}{global} + \text{Orientation}{global} \cdot t{relative}$$ $$\text{Orientation}{global} = \text{Orientation}{global} \cdot R_{relative}$$
+
+Step 2.4: Evaluation & Testing of Phase 2
+To check the visual odometry's stability, we will create a script scripts/test_vo.py that:
+
+Loads a video file.
+Feeds it frame-by-frame to our VisualOdometry class.
+Draws the camera's $(x, z)$ path in a 2D trajectory window (plot) in real-time.
+Stability Check: We will inspect if the tracked path drifts drastically when you move the camera, and calibrate the parameters to make it as smooth and stable as possible.
