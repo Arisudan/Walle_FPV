@@ -64,4 +64,36 @@ Where $\alpha = 0.3$ is the smoothing factor.
 
 > This acts as a "running average" memory, dampening high-frequency shake and vibration while preserving the true direction of movement.
 
+---
+
+# 1. Why Our Current 2D Map is Not Yet Like LingBot
+Right now, our client script projects 3D edge points and draws them onto the 2D grid:
+
+python
+> grid_map[gy[valid_mask], gx[valid_mask]] = 255
+
+The Problem: Because monocular Visual Odometry accumulates drift (especially during turns), the points from new frames are drawn slightly offset from the old ones.
+Instead of a single, sharp wall line, you get a fuzzy, drifting cloud of dots that blurs the map.
+What LingBot does differently: LingBot-Map does not just project points. It runs an Alignment Filter (Scan Matching). It locks the new frame's points onto the existing map structures so that the walls align and "snap" together into clean, single-pixel lines.
+
+# 2. The Major Risk of Compiling LingBot's Raw C++ Code
+According to our research on the Robbyant/lingbot-map repository, the project is not a pure-Python library:
+
+It requires compiling complex C++ CUDA extensions (such as NVIDIA Kaolin, FlashInfer, and custom PyTorch attention operators).
+
+* The Hazard: Compiling custom CUDA extensions on Linux/Windows is extremely brittle. It requires an exact match between your GCC compiler, your Host NVCC compiler (currently version 12.0), and your active GPU driver (supporting 13.0).
+* If we try to compile it over SSH, we will face hours of compiler errors, dependency mismatches, and potential library conflicts.
+
+# 3. Our Solution: A Custom 2D ICP Aligner (Snapping the Map Together)
+Instead of fighting with C++ compiler errors, we can implement the exact mathematical logic that LingBot uses directly in our Python script using 2D ICP (Iterative Closest Point) Scan-Matching:
+
+## How it will work:
+* **Extract the Scan**: When a new keyframe is processed, we get a "scan" (the new set of 2D boundary coordinates).
+* **Match with the Map**: We run a fast, pure-NumPy 2D ICP Aligner that compares the new scan with the existing global map points.
+* **Snap & Align**: It calculates the exact rotation and translation correction needed to align the new wall outlines with the old ones.
+* **Correct the Drift**: It updates the camera's pose $(tx, tz)$ to match this alignment.
+---
+
+
+
 > The resulting red trajectory line in the 3D Open3D window and on the 2D floor plan will look extremely smooth and professional!
