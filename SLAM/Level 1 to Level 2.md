@@ -64,6 +64,7 @@ Where $\alpha = 0.3$ is the smoothing factor.
 
 > This acts as a "running average" memory, dampening high-frequency shake and vibration while preserving the true direction of movement.
 
+> The resulting red trajectory line in the 3D Open3D window and on the 2D floor plan will look extremely smooth and professional!
 ---
 
 # 1. Why Our Current 2D Map is Not Yet Like LingBot
@@ -96,4 +97,4 @@ Instead of fighting with C++ compiler errors, we can implement the exact mathema
 
 
 
-> The resulting red trajectory line in the 3D Open3D window and on the 2D floor plan will look extremely smooth and professional!
+
