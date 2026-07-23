@@ -44,3 +44,24 @@ Because it uses the AI-predicted depth map, it only extracts boundaries where th
 
 ### Result: 
 A perfectly clean, shadow-free 2D wireframe floor plan. It is extremely fast and robust.
+
+---
+
+# Trajectory Memory & Path Smoothing:
+
+### The Issue with Monocular VO:
+Because monocular visual odometry tracks keypoints frame-by-frame on a webcam or drone camera feed, it suffers from high-frequency jitter (tiny shifts in pixel coordinates due to sensor noise or camera vibration). This makes the tracked camera path and 2D floor-plan line look slightly shaky or jumpy.
+
+### The LingBot-Map Ideology:
+In lingbot-map, the system uses a trajectory memory window to recall past states and keep the camera path smooth.
+
+### What We Will Implement:
+We will write a sliding-window temporal filter (a low-pass smoothing filter) for the accumulated camera translation $(x, y, z)$.
+
+Every frame, the raw translation is smoothed using the formula: $$t_{\text{smooth}}^{(k)} = \alpha \cdot t_{\text{raw}}^{(k)} + (1 - \alpha) \cdot t_{\text{smooth}}^{(k-1)}$$
+
+Where $\alpha = 0.3$ is the smoothing factor.
+
+> This acts as a "running average" memory, dampening high-frequency shake and vibration while preserving the true direction of movement.
+
+> The resulting red trajectory line in the 3D Open3D window and on the 2D floor plan will look extremely smooth and professional!
