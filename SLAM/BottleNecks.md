@@ -47,3 +47,18 @@
 
 * We solved this by scaling the depth map so that the average indoor depth is assumed to be 2.0 meters (median_depth = 2.0). 
 * While this works great for testing in a single room, if you move the camera closer to a wall or step into a massive warehouse, the scale factor will become incorrect, causing the metric path drawing to shrink or stretch.
+
+---
+Error:
+  
+  * (venv) ndrone@pop-os:~/Desktop/SLAM$ python scripts/mast3r_server.py
+Traceback (most recent call last):
+  File "/home/ndrone/Desktop/SLAM/scripts/mast3r_server.py", line 18, in <module>
+    from mast3r_slam.frame import Mode, SharedKeyframes, SharedStates, create_frame
+  File "/home/ndrone/Desktop/SLAM/MASt3R-SLAM/mast3r_slam/frame.py", line 6, in <module>
+    from mast3r_slam.mast3r_utils import resize_img
+  File "/home/ndrone/Desktop/SLAM/MASt3R-SLAM/mast3r_slam/mast3r_utils.py", line 11, in <module>
+    import mast3r_slam.matching as matching
+  File "/home/ndrone/Desktop/SLAM/MASt3R-SLAM/mast3r_slam/matching.py", line 5, in <module>
+    import mast3r_slam_backends
+ImportError: /home/ndrone/Desktop/SLAM/MASt3R-SLAM/mast3r_slam_backends.cpython-312-x86_64-linux-gnu.so: undefined symbol: _Z19refine_matches_cudaN2at6TensorES0_S0_ii
