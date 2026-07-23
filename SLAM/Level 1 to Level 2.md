@@ -30,3 +30,17 @@ Why import it: You can directly import their temporal memory attention layers. T
 D. The Real-time Point Cloud Renderer (From lingbot-map/viz)
 What it replaces: Our custom Open3D visualizer update loop.
 Why import it: Their visualization scripts are pre-built to stream point clouds and camera frustums smoothly over local connections (perfect for the Laptop-to-RTX 5090 SSH setup).
+
+---
+
+# Depth-Gradient Boundary Extraction:
+
+### How it works: 
+
+Instead of running Canny edge detection on the color image (which captures shadows, carpet patterns, and shirt designs that are not real obstacles), we calculate the spatial gradient (Sobel/Laplacian) of the Depth Anything V2 Large depth map on your server.
+
+### Why it's cleaner: 
+Because it uses the AI-predicted depth map, it only extracts boundaries where there is an actual physical depth change in the room (like where a table ends, a wall corner, or a doorway). It completely ignores shadows, textures, and color patterns.
+
+### Result: 
+A perfectly clean, shadow-free 2D wireframe floor plan. It is extremely fast and robust.
