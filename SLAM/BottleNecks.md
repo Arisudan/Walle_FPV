@@ -49,9 +49,17 @@
 * While this works great for testing in a single room, if you move the camera closer to a wall or step into a massive warehouse, the scale factor will become incorrect, causing the metric path drawing to shrink or stretch.
 
 ---
-Error:
+# As on 24-07-2026 I faced the following errors:
+
+### This below error occured because of the mismatch in the versions and the python getting a bigger conflict with the C++
+
+### This current folder is fully handled with python and bringing in SLAM imported to run here in this project folder causes conflicts and gives out major errors while compiling the files.
+
+### For initilaizing the SLAM into my folder I cloned the repository from the 
+
+**Error**:
   
-  * (venv) ndrone@pop-os:~/Desktop/SLAM$ python scripts/mast3r_server.py
+>  (venv) ndrone@pop-os:~/Desktop/SLAM$ python scripts/mast3r_server.py
 Traceback (most recent call last):
   File "/home/ndrone/Desktop/SLAM/scripts/mast3r_server.py", line 18, in <module>
     from mast3r_slam.frame import Mode, SharedKeyframes, SharedStates, create_frame
