@@ -55,6 +55,9 @@ I cloned the mast3r SLAM Repository [Link to access that Repo - Click Me!](https
 
 At the end of the day I placed mast3r SLAM Repository and tried to integrate them to the existing files of the lingbot map file.
 
+Also i have mapped the list of work done for the day and that files can be accessed by &&rarr; [Open Document 1](Phase1.txt) and [Open Document 2](Phase2.txt)
+
+
 ---
 # As on 24-07-2026 I faced the following errors:
 
