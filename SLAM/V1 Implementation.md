@@ -32,4 +32,4 @@
 - **The Logic:** We implemented **Incremental Caching**. The backend now saves a copy of the pixel image generated at frame 499 into memory (`state["_cached_free_space"]`). When the user asks for frame 500, the code skips the `for` loop entirely. It simply grabs the cached image of frame 499, calculates the math for *only* the single new frame 500 (the delta), and stamps it on top. 
 - **The Result:** We eliminated 99.9% of the CPU workload. The rendering time dropped from several seconds down to less than a single millisecond, entirely eliminating the lag.
 
-*(Note: This was documented on 28-07-2026 by Arisudan TH)*
+*(Note: This was documented on 27-07-2026 by Arisudan TH)*
