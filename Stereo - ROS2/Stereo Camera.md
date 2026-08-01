@@ -160,8 +160,8 @@ The code reads your clean baseline value from the GUI:
 ```python
 clean_baseline = self.clean_rmse.get()
 ```
-* **$\Delta$RMSE vs clean (m)**: `rmse_current - clean_baseline` (shows how much the error grew).
-* **$\Delta$RMSE %**: `((rmse_current - clean_baseline) / clean_baseline) * 100%` (shows the percentage increase in error).
+* **$\Delta$ RMSE vs clean (m)**: `rmse_current - clean_baseline` (shows how much the error grew).
+* **$\Delta$ RMSE %**: `((rmse_current - clean_baseline) / clean_baseline) * 100%` (shows the percentage increase in error).
 
 ---
 
