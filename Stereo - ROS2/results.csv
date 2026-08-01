@@ -1,0 +1,11 @@
+Sequence,Umeyama Scale,ATE RMSE(in m),Mean (in m),Median (in m),Max(in m),ΔRMSE vs clean (m),ΔRMSE %
+bag_rgb_d_office_RGB-D,0.0752,0.5348,0.4583,0.4098,1.1326,-,-
+bag_rgb_d_office_Monocular,0.3096,0.526,0.4585,0.4125,1.0511,-,-
+bag_rgb_d_floor_slow_RGB-D,0.6741,0.5278,0.4519,0.3142,1.0117,-,-
+bag_rgb_d_floor_slow_Monocular,0.6166,0.3456,0.3226,0.3249,0.6996,-,-
+bag_stereo_office_Stereo,0.144,0.4839,0.4392,0.3736,0.9125,0.004,+0.9%
+bag_stereo_office_Monocular,0.8389,0.4203,0.3577,0.3095,0.8816,-,-
+bag_stereo_office_Stereo,0.1567,0.4304,0.3935,0.3572,0.8069,-,-
+bag_stereo_office_Monocular,0.7246,0.3810,0.3226,0.2713,0.9205,-0.039,-9.3%
+bag_rgb_d_office_Monocular,0.3054,0.5708,0.4822,0.4697,1.1174,+0.045,+8.5%
+bag_rgb_d_office_Monocular,0.0844,0.6110,0.5329,0.5249,1.0216,+0.085,+16.2%
