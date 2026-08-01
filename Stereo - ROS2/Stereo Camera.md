@@ -77,3 +77,37 @@ This bag is used to run the following **4 modes**:
 | **RGB-D-Inertial** | **Yes** | No |
 
 ---
+## Procedural Flow:
+
+**Known Physical Trajectory (Measured Path):**
+***What you do***: Tape a straight line of exactly 2 meters (or a square of 1m x 1m) on the floor. Move the camera precisely along this line/track.
+***How it works: The*** physical path dimensions are known.
+***Benchmarking***: We compare the SLAM's calculated translation trajectory against the physical measurements (e.g., verifying if the X/Y travel distances match exactly 2.0 meters).
+
+
+To implement **Known Physical Trajectory / Measured Path**, here is the technical plan:
+
+### 1. How we generate the Ground Truth
+Since you are using a live camera, we can generate a **synthetic ground truth** trajectory based on your physical path.
+
+* For example, if you walk a **straight line** of $L$ meters:
+  
+  1. The dashboard records the start time ($t_{start}$) and end time ($t_{end}$).
+  2. For every frame at timestamp $t$, it generates a ground truth pose moving linearly from $(0,0,0)$ to $(L, 0, 0)$ over the duration:
+     
+     $$X_{gt} = \frac{t - t_{start}}{t_{end} - t_{start}} \times L, \quad Y_{gt} = 0, \quad Z_{gt} = 0$$
+     
+* We will add an input box in the GUI: **"Path Length (meters)"** (default: `2.0`).
+
+### 2. Computing the ATE and $\Delta\text{RMSE}$
+When you run a benchmark:
+1. **Clean Run**: You run the benchmark on the clean bag first. The tool calculates its `ATE RMSE` compared to the synthetic straight line. This becomes the baseline: `RMSE_clean`.
+2. **Perturbed Runs (Light/Medium/Heavy)**: You run the other bags. The tool calculates their `ATE RMSE` compared to the same synthetic straight line.
+3. **$\Delta\text{RMSE}$ Calculations**: The tool automatically looks up the `RMSE_clean` value to compute:
+
+
+   * `ΔRMSE vs clean = RMSE_current - RMSE_clean`
+
+   * `ΔRMSE % = ((RMSE_current - RMSE_clean) / RMSE_clean) * 100%`
+
+---
