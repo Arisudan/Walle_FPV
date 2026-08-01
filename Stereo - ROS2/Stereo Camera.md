@@ -148,14 +148,17 @@ ape_metric.process_data((ref_synced, est_synced))
 stats = ape_metric.get_all_statistics()
 ```
 The `stats` dictionary returns the calculated error values:
-* **ATE RMSE(in m)**: $$\sqrt{\frac{1}{N}\sum_{i=1}^{N} (\|\mathbf{p}_{est,i} - \mathbf{p}_{ref,i}\|^2)}$$ (Root Mean Squared Error).
+* **ATE RMSE(in m)**:Root Mean Squared Error (RMSE) Formula
+
+$$\text{RMSE} = \sqrt{\frac{1}{N}\sum_{i=1}^{N} (\|\mathbf{p}_{est,i} - \mathbf{p}_{ref,i}\|^2)}$$
+
 * **Mean (in m)**: Average error value across all matched frames.
 * **Median (in m)**: The middle error value in the sorted list of errors.
 * **Max (in m)**: The maximum translation deviation (worst point of drift).
 
 ---
 
-### 4. Delta Baselines ($\Delta$RMSE)
+### 4. Delta Baselines ($\Delta$ RMSE)
 The code reads your clean baseline value from the GUI:
 ```python
 clean_baseline = self.clean_rmse.get()
