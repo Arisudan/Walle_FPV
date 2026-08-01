@@ -83,7 +83,7 @@ This bag is used to run the following **4 modes**:
 
 ***What you do***: Tape a straight line of exactly 2 meters (or a square of 1m x 1m) on the floor. Move the camera precisely along this line/track.
 
-***How it works: The*** physical path dimensions are known.
+***How it works***: The physical path dimensions are known.
 
 ***Benchmarking***: We compare the SLAM's calculated translation trajectory against the physical measurements (e.g., verifying if the X/Y travel distances match exactly 2.0 meters).
 
