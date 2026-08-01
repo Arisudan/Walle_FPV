@@ -1,3 +1,5 @@
+# 31-07-2026
+---
 The **Intel RealSense D435i** is a highly versatile sensor suite. Because it contains **an RGB camera, two Infrared cameras (spaced for stereo), an IR projector, and a built-in IMU (inertial sensor)**, it can be run in any of the following modes for SLAM:
 
 ---
@@ -39,3 +41,39 @@ Since you need to evaluate these modes with **live camera data** to produce resu
 1. You can run ORB-SLAM3 in different configurations (e.g., Stereo, Stereo-Inertial, RGB-D) using the D435i.
 2. We can record the trajectory outputs from these runs.
 3. Compare the Absolute Trajectory Error (ATE) or drift for each mode to write your final comparative analysis report.
+
+---
+# 01-08-2026
+---
+Here is how the 6 SLAM modes map to your two recorded ROS Bags:
+
+### 1. If you select the **RGB-D Bag** (Contains Color + Depth + IMU):
+This bag is used to run the following **4 modes**:
+* **RGB-D** (Requires Color + Depth)
+* **RGB-D-Inertial** (Requires Color + Depth + IMU)
+* **Monocular** (Requires only the Color stream, which is inside this bag)
+* **Monocular-Inertial** (Requires Color + IMU, both inside this bag)
+
+---
+
+### 2. If you select the **Stereo Bag** (Contains Left IR + Right IR + Color + IMU):
+This bag is used to run the following **4 modes**:
+* **Stereo** (Requires Left IR + Right IR)
+* **Stereo-Inertial** (Requires Left IR + Right IR + IMU)
+* **Monocular** (Requires only the Color stream, which is inside this bag)
+* **Monocular-Inertial** (Requires Color + IMU, both inside this bag)
+
+---
+
+### Summary Table for Benchmarking:
+
+| SLAM Mode | Use RGB-D Bag? | Use Stereo Bag? |
+| :--- | :---: | :---: |
+| **Monocular** | **Yes** | **Yes** |
+| **Monocular-Inertial** | **Yes** | **Yes** |
+| **Stereo** | No | **Yes** |
+| **Stereo-Inertial** | No | **Yes** |
+| **RGB-D** | **Yes** | No |
+| **RGB-D-Inertial** | **Yes** | No |
+
+---
